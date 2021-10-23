@@ -25,19 +25,12 @@ export default function Player({ }: Props): ReactElement {
 
     const dispatch = useDispatch();
 
-    const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.item(0) as File;
-        dispatch(setVideo(URL.createObjectURL(file)))
-    };
-
-    const handleUpload = (file: RcFile, fileList: RcFile[]) => {
-        console.log(fileList)
+    const handleUpload = (file: File, fileList: File[]) => {
+        dispatch(setVideo(URL.createObjectURL(file), file.name))
         return false
     }
 
     const renderItem = (element: ReactElement, file: UploadFile, fileList: object[]) => {
-        console.log(element)
-
         return (
             <div title="Play" className='file-element'>
                 {element}
@@ -51,7 +44,7 @@ export default function Player({ }: Props): ReactElement {
     return (
         <Layout style={{ minHeight: "95vh", maxHeight: "95vh" }}>
             <Header className="header">
-                <img width={"auto"} height={"75%"} src={logo} />
+                <img width={"auto"} height={"60%"} src={logo} />
 
                 {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                     <Menu.Item key="1">nav 1</Menu.Item>

@@ -1,6 +1,6 @@
-export type Action = { type: "SET_VIDEO"; payload: string };
+export type Action = { type: "SET_VIDEO"; payload: { url: string, name: string} };
 
-export const setVideo = (videoUrl: string): Action => ({
+export const setVideo = (videoUrl: string, videoName: string): Action => ({
   type: "SET_VIDEO",
-  payload: videoUrl,
+  payload: {url: videoUrl, name: videoName},
 });
