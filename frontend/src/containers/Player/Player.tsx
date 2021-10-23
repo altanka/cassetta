@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, ReactElement } from 'react'
+import React, { ChangeEvent, ChangeEventHandler, Dispatch, ReactElement } from 'react'
 import ReactPlayer from 'react-player'
 import { useSelector, useDispatch } from "react-redux";
 import { PlayerState } from "../../store/reducers";
@@ -8,10 +8,11 @@ import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/
 import logo from '../../assets/logo.svg';
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 import './Player.css'
-import { RcFile } from 'antd/lib/upload';
-import { UploadFile } from 'antd/lib/upload/interface';
+
+import { SET_VIDEO_URL } from './../../context/API'
 
 interface Props {
 
@@ -26,7 +27,7 @@ export default function Player({ }: Props): ReactElement {
     const dispatch = useDispatch();
 
     const handleUpload = (file: File, fileList: File[]) => {
-        dispatch(setVideo(URL.createObjectURL(file), file.name))
+        dispatch(setVideoBackend(URL.createObjectURL(file), file.name))
         return false
     }
 
@@ -36,6 +37,23 @@ export default function Player({ }: Props): ReactElement {
                 {element}
             </div>
         )
+    }
+
+    const setVideoBackend = (videoUrl: string, videoName: string) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ videoUrl: videoUrl, videoName: videoName })
+        };
+        console.log(SET_VIDEO_URL, requestOptions)
+        return function (dispatch: (_: any) => any) {
+            return fetch(SET_VIDEO_URL, requestOptions)
+                .then(response => response.json())
+                .then(
+                    (response) => {console.log(response);dispatch(setVideo(response.videoUrl, response.videoName))},
+                    (error) => console.log(error),
+                );
+        };
     }
 
     const { SubMenu } = Menu;
