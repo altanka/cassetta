@@ -1,9 +1,9 @@
-import React, { ChangeEvent, ChangeEventHandler, Dispatch, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import ReactPlayer from 'react-player'
 import { useSelector, useDispatch } from "react-redux";
 import { PlayerState } from "../../store/reducers";
-import { setVideo } from "../../store/actions";
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { setVideoBackend } from "../../store/actions";
+import { Layout, Menu } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import logo from '../../assets/logo.svg';
 import { Upload, Button } from 'antd';
@@ -12,7 +12,6 @@ import { UploadFile } from 'antd/lib/upload/interface';
 
 import './Player.css'
 
-import { SET_VIDEO_URL } from './../../context/API'
 
 interface Props {
 
@@ -39,22 +38,7 @@ export default function Player({ }: Props): ReactElement {
         )
     }
 
-    const setVideoBackend = (videoUrl: string, videoName: string) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ videoUrl: videoUrl, videoName: videoName })
-        };
-        console.log(SET_VIDEO_URL, requestOptions)
-        return function (dispatch: (_: any) => any) {
-            return fetch(SET_VIDEO_URL, requestOptions)
-                .then(response => response.json())
-                .then(
-                    (response) => {console.log(response);dispatch(setVideo(response.videoUrl, response.videoName))},
-                    (error) => console.log(error),
-                );
-        };
-    }
+
 
     const { SubMenu } = Menu;
     const { Header, Content, Sider } = Layout;
@@ -135,7 +119,6 @@ export default function Player({ }: Props): ReactElement {
                                     <Button style={{ position: "absolute", marginTop: -40, marginLeft: "22%" }} icon={<UploadOutlined />}>Upload</Button>
                                 </Upload>
                             </div>
-
                         </div>
                     </Menu>
                 </Sider>
